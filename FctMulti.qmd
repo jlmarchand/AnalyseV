@@ -1,0 +1,916 @@
+---
+title: "Fonctions multivariées"
+subtitle: "régularité et optimisation"
+author: "Jean-Louis Marchand"
+format: blackboard-revealjs
+transition:  slide
+background-transition: fade
+number-sections: true
+toc: true
+toc-title: "Sommaire"
+css: styles.css
+chalkboard: true
+smaller: true
+number-depth: 2
+toc-depth: 1
+scrollable: false
+knitr:
+  opts_chunk: 
+    echo: true
+    collapse: false
+    prompt: false
+    comment:  ''
+    code-line-numbers: false
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache = FALSE, fig.align = "center", warning = FALSE, error = FALSE, message = FALSE)
+library(tidyverse)
+library(plotly)
+library(latex2exp)
+library(kableExtra)
+library(htmltools)
+  
+jlm_plotly <- function(data, ...) {
+  plot_ly(data = data,
+          ...,
+          width = 800,
+          height = 500) %>%
+    layout(
+      xaxis = list(
+        range = c(-5,5),
+        constrain = "domain",
+        zerolinecolor = 'ffff',
+        zerolinewidth = 4,
+        gridcolor = 'ffff',      
+        dtick = 1,
+        tickfont = list(size = 22, color = 'white')
+      ),
+      yaxis = list(
+        range = c(-5,5),
+        zerolinecolor = 'ffff',
+        zerolinewidth = 4,
+        gridcolor = 'ffff',
+        dtick = 1,
+        scaleanchor = "x",
+        scaleratio = 1,
+        tickfont = list(size = 22, color = 'white')
+      ),
+      plot_bgcolor  = "transparent",
+      paper_bgcolor = "transparent",
+      legend = list(font = list(
+        size = 22, color = "white"
+      ))
+    )
+}
+```
+
+
+# Introduction
+
+## Le cadre
+
+- dans ce chapitre, nous allons étudier des **fonctions de $\mathbb R^n$ dans $\mathbb R^p$**
+- ainsi pour $x = (x_1,\dots,x_n)\in D_f$, l'images s'écrit $f(x)=\big(f_1(x),\dots,f_p(x)\big)$
+- en statistiques, un estimateur $\hat\theta$ est une fonction qui à $x = (x_1,\dots,x_n)$ associe un vecteur $\hat\theta(x) = \big(\theta_1(x),\dots,\hat\theta_p(x)\big)$, il cherche à estimer au mieux les paramètres d'un modèle considéré $\theta= \theta_1,\dots,\theta_p$, 
+- les estimateurs utilisés sont la plupart du temps définis comme solutions uniques de problèmes d'optimisation
+- exemple : échantillon de variables normales IID, les seuls paramètres à estimer sont l'espérance $\theta_1=\mu$ et la variance $\theta_2=\sigma^2$, alors la méthode des **moindres carrés** mène à $$\hat\theta_1(x)= \bar x = \frac{x_1+\dots+x_n}n,\qquad \hat\theta_2(x)=s^2 = \frac{(x_1-\bar x)^2+\dots+(x_n-\bar x)^2}n$$
+ce résultat fournit bien une définition d'une fonction de $\mathbb R^n$ dans $\mathbb R^2$
+
+## Rappels et remarques
+
+- au premier semestre, vous avez déjà abordé les fonctions de $\mathbb R^2$ dans $\mathbb R$, il nous faut donc comprendre ce qui peut s'étendre raisonnablement et quelles sont les subtilités à apparaître
+- nous devons reprendre la même logique :
+   + définir la notion de proximité dans $\mathbb R^n$ (et donc $\mathbb R^p$)
+   + définir la notion de limites de suite, de fonction
+   + en déduire les développements limités à l'ordre 1 et 2
+   + lorsque $p=1$, rechercher les extrema locaux et globaux
+- la connaissance du cours et son application directe constitueront la base des évaluations, des calculs seuls sans justification ne garantiront pas la moyenne
+
+# Topologie
+
+- l'outil standard que nous utiliserons pour mesurer des distances : **la norme**
+
+>### Définition :
+> une norme $\|\,\,\|$ sur $\mathbb R^n$ est une fonction définie sur $\mathbb R^n$ telle que :
+>
+>   1. $\forall x\in\mathbb R^n,\quad \|x\| \geq 0,$
+>   2. $\forall x\in\mathbb R^n, \lambda\in\mathbb R,\quad \|\lambda x\| = |\lambda| \|x\|,$
+>   3. $\|x\|=0\Longrightarrow x=0_{\mathbb R^n},$
+>   4. $\forall x,y\in\mathbb R^n,\quad \|x+y\|\leq \|x\|+\|y\|.$
+  
+- c'est une généralisation de la valeur absolue, **la distance de $x$ à $y$ est alors $\|x-y\|$**
+
+## Normes usuelles
+- norme $p$ : $$\|x\|_p=\left(|x_1|^p+\dots +|x_n|^p\right)^{\frac 1p}$$
+- pour $p=2$ :  $$\|x\|_2=\sqrt{|x_1|^2+\dots +|x_n|^2}$$
+- norme infinie : $$\|x\|_\infty=\max(|x_1|,\dots,|x_n|)$$
+
+- exemple : $x = (1, -2, 2)$,  $$\|x\|_1=5,\, \|x\|_2=\sqrt{9}=3,\,\|x\|_3=\sqrt[3]{17}\approx 2.57,\, \|x\|_\infty=2 $$
+
+## Laquelle choisir ?
+
+>### Théorème : 
+> toutes les normes sur $\mathbb R^n$ sont équivalentes, c'est-à-dire que si $\|\,\|$ et $\|\,\|'$ sont deux normes sur $\mathbb R^n$, alors il existe $\alpha,\beta>0$ tels que :$$\forall x\in\mathbb R^n,\quad \alpha \|x\|\leq\|x\|'\leq\beta\|x\|.$$
+
+- remarque : on en déduit $\tfrac1\beta \|x\|'\leq \|x\|\leq\tfrac1\alpha \|x\|'$ en travaillant séparément sur les inégalités, la définition est bien symétrique
+- utilité du résultat : les limites reposent sur des éléments aussi proches que désirés, l'équivalence nous garantit que **si une proximité voulue peut-être obtenue pour une norme, elle le sera pour toutes les autres.**
+- exemple : sur $\mathbb R^3$,  
+  $$\|(x_1,x_2,x_3)\|_2\leq \|(x_1,x_2,x_3)\|_1\leq 3\|(x_1,x_2,x_3)\|_2$$
+
+## Un résultat pratique
+
+- la norme 2 est associée au produit scalaire usuel: $$\langle x,y\rangle =\sum_{i=1}^n x_iy_i \Longrightarrow\|x\|_2 = \sqrt{\langle x,x\rangle}$$
+
+>### Théorème : Inégalité de Cauchy-Schwarz
+> Pour tout couple de vecteur $x,y\in\mathbb R^{n}$, l'inégalité suivante est vérifiée
+	$$|\langle x,y\rangle| \leq \|x\|_2\|y\|_2.$$
+	L'égalité est atteinte si et seulement si $x$ et $y$ sont colinéaires.
+
+- à l'aide de ce résultat on garantit que  $\frac{\langle x,y\rangle}{\|x\|_2\|y\|_2}$ peut être vu comme le cosinus d'un angle qui se trouve être  celui formé par $x$ et $y$ dans le plan qu'ils engendrent
+
+## Ensemble ouvert ou fermé
+
+>### Définition :
+>
+> - on appelle respectivement **boule ouverte** et **boule fermée** de centre $x\in\mathbb R^n$ et de rayon $r\geq 0$ pour la norme $\|\,\,\|$ les ensembles 
+$$\mathcal B_{\|\,\|}(x,r) = \{ x\in\mathbb R^n\colon \|x\|<r\},\quad \overline{\mathcal  B_{\|\,\|}}(x,r) = \{x\in\mathbb R^n\colon \|x\|\leq r\}$$ 
+> - on dit qu'un ensemble $E\in\mathbb R^{n}$ est  **ouvert** si pour chaque point $x\in E$, il existe $r_{x}>0$ tel que 
+		$$\mathcal B_{\|\,\|}(x,r_{x})\subset E,$$ il est dit **fermé** si son complémentaire est ouvert.
+
+- pour se faire une image, un ensemble fermé contient tout son bord alors qu'un un ensemble ouvert ne contient aucun point de son bord; il existe donc des ensembles ni ouverts ni fermés
+- travailler avec un ensemble ouvert, c'est garantir qu'il existe des voisins dans toutes les directions sans sortir l'ensemble considéré !
+- pour les fonctions réelles, on avait l'habitude de comparer les limites à gauches et à droite, parce que ce sont les deux seules façons de s'approcher d'une abscisse, en dimension supérieure, il faut pouvoir arriver suivant **n'importe quel chemin** rectiligne ou pas
+
+# Limite
+
+## Les suites
+
+>### Définition :
+> une suite $(u_k)_{k\in\mathbb N}$ d'éléments de $\mathbb R^n$ **converge vers une limite $\ell \in\mathbb R^n$** pour la norme $\|\,\,\|$ si 
+$$\forall \varepsilon >0,\exists N\in\mathbb N, \forall n\geq N,\quad \|u_k-\ell\|<\varepsilon.$$
+
+
+>### Propriété :
+> si une suite de $\mathbb R^n$ converge pour une norme donnée alors elle converge pour toutes les normes vers la même et unique limite !
+
+- sans surprise, la façon la plus naturelle de s'en sortir consiste à se ramener à une suite réelle ! 
+- en pratique, on pourra utiliser la norme qui nous simplifiera le plus la vie
+
+## Autres propriétés
+
+>### Propriété :
+>
+>- une suite converge dans $\mathbb R^n$ si et seulement si toutes ses coordonnées convergent dans $\mathbb R$ 
+$$\lim_{k\to+\infty}u_k=\ell\in\mathbb R^n\Longleftrightarrow \forall 1\leq i\leq n,\,\lim_{k\to+\infty}(u_k)_i=\ell_i\in\mathbb R$$
+>- toute combinaison linéaire de suites convergentes d'un même espace $\mathbb R^n$ converge vers la combinaison linéaire des limites
+$$\lim_{k\to+\infty}u_k=\ell \in\mathbb R^n,\,\&\,\lim_{k\to+\infty}v_k= \ell'\in\mathbb R^n\\\Longrightarrow \forall \alpha,\beta\in \mathbb  R,\, \lim_{k\to+\infty}\alpha u_k+\beta v_k=\alpha\ell+\beta \ell'\in\mathbb R^n$$
+
+## Limite de fonction
+
+>### Définition : 
+> soit $f$ une fonction définie au moins sur un ouvert $\mathcal U\in\mathbb R^n$ à images dans $\mathbb R^p$, et $a\in\mathcal U$, la fonction $f$ **converge vers $\ell\in\mathbb R^p$**  si
+$$\forall \varepsilon>0, \exists \eta>0, 0< \| x-a\|<\eta \Rightarrow \|f(x)-\ell\|'<\varepsilon,$$ on note alors $$\lim_{x\to a}f(x)=\ell.$$
+
+
+- **attention** les normes sont définies sur des espaces a priori différents $\mathbb R^n$ et $\mathbb R^p$ !
+- choisir d'étudier la limite en un point $a$ d'un ouvert où $f$ est défini est une situation de confort évitant les problèmes de bord : pour n'importe quel chemin allant vers $a$, les images correspondantes existent  
+
+
+## Propriétés des limites de fonction
+
+>### Propriété
+>
+> - si la limite existe, elle est unique et ce quelles que soient les normes choisies sur les deux espaces,
+- si la fonction converge en $a$ alors il existe un ouvert $\mathcal V$ contenant $a$ sur lequel $f$ est bornée,
+- la fonction converge si et seulement si chacune des ses coordonnées converge $$\lim_{x\to a}f(x)=\ell\in\mathbb R^p \Longleftrightarrow \forall 1\leq i\leq n,\,\lim_{x\to a}f(x)_i=\ell_i\in\mathbb R$$
+- si $f$ et $g$ convergent respectivement vers $\ell\in\mathbb R^p$ et $\ell'\in\mathbb R^p$, alors toute combinaison linéaire converge vers la combinaison linéaire des limites 
+$$\lim_{x\to a}f(x)=\ell\in\mathbb R^p \,\&\, \lim_{x\to a}g(x)=\ell'\in\mathbb R^p \\\Rightarrow \forall \alpha,\beta\in\mathbb R, \, \lim_{x\to a}\alpha f(x)+ \beta g(x)=\alpha \ell+ \beta\ell '\in\mathbb R^p.$$
+- si $f$ converge vers $\ell$ en $a$ et $g$ vers $\ell'$ en $\ell$ alors $g\circ f$ converge vers $\ell'$ en  $a$
+
+## Le résultat super utile !
+
+>### Théorème de la Caractérisation séquentielle de la limite :
+> la fonction $f$ converge vers $\ell\in\mathbb R^p$ en $a\in\mathbb R^n$  si et seulement si **pour toute suite** $(u_k)_{k\in\mathbb N}$ d'éléments de $\mathbb R^n$ convergeant vers $a$, alors la suite $\big(f(u_k)\big)_{k\in\mathbb N}$ converge vers $\ell$.
+
+- cela signifie deux choses :
+  + on pourra toujours se ramener à des études de suite pour prouver une convergence
+  + pour montrer qu'une fonction ne converge pas, il suffit de trouver une suite d'images qui ne converge pas ou alors deux suites qui convergent vers des limites différentes
+
+
+# Continuité et Différentiabilité
+
+## Continuité
+
+>### Définition :
+> soit un ensemble ouvert $\mathcal U\subset \mathbb R^n$ sur lequel une fonction $f$ à images dans $\mathbb R^p$ est définie et $a\in\mathbb R^n$, $f$ est dite **continue en $a$** si f converge vers $f(a)\in\mathbb  R^p$ en $a$ $$\lim_{x\to a}f(x)=f(a).$$ La fonction est dite **continue sur \mathcal U** si elle est continue en chacun des ses éléments.
+
+- la subtilité entre limite et continuité en un point : la limite en $a$ peut exister sans que ça ne soit $f(a)$
+on pourra garder en tête la fonction numérique *partie entière* notée $\lfloor x \rfloor$ qui à tout réel $x$ associe son arrondi à l'entier inférieur
+- les fonctions constantes, linéaires, affines et celles à coordonnées polynomiales sont continues
+
+
+## Opérations et continuité
+
+>### Propriété :
+>
+>- toute combinaison linéaire de fonctions continues en $a$ à images dans un même espace est continue $a$,
+>- le produit de deux fonctions numériques continues en $a$ est continu en $a$,
+>- si $f$ est continue en $a$ et $g$ en $f(a)$ alors $g\circ f$ est continue en $a$,
+>- $f$ continue en $a$ si et seulement si les applications coordonnées sont continues en $a$
+
+## Exemple 1
+
+- **les coordonnées polaires**, vues au premier semestre sont la donnée d'un couple $(\rho,\theta)$ pour localiser un point du plan
+
+::::{.columns}
+:::{.column width="50%"}
+
+```{r}
+# -----------------------------
+# Données
+# -----------------------------
+x <- c(0, 2, 2)
+y <- c(0, 4, 4)
+data <- data.frame(x, y)
+
+rho <- sqrt(20)
+theta <- seq(0, atan(2), by = 0.001)
+
+r <- rho / 3
+theta_end <- max(theta)
+
+# -----------------------------
+# Arc theta (fin)
+# -----------------------------
+x_end <- r * cos(theta_end)
+y_end <- r * sin(theta_end)
+
+# Tangente unitaire (sens trigonométrique)
+tx <- -sin(theta_end)
+ty <-  cos(theta_end)
+
+# Normale
+nx <- -ty
+ny <-  tx
+
+# -----------------------------
+# Flèche (triangle géométrique)
+# -----------------------------
+L <- 0.15   # longueur de la flèche
+W <- 0.08   # largeur de la flèche
+
+P1 <- c(x_end, y_end)
+P2 <- c(x_end - L * tx + W * nx,
+        y_end - L * ty + W * ny)
+P3 <- c(x_end - L * tx - W * nx,
+        y_end - L * ty - W * ny)
+
+arrow_x <- c(P1[1], P2[1], P3[1], P1[1])
+arrow_y <- c(P1[2], P2[2], P3[2], P1[2])
+
+# -----------------------------
+# Label theta
+# -----------------------------
+theta_lab <- theta_end / 2
+x_lab <- 1.15 * r * cos(theta_lab)
+y_lab <- 1.15 * r * sin(theta_lab)
+
+# -----------------------------
+# Figure complète
+# -----------------------------
+fig <- data %>%
+  plot_ly(height = 450, width = 450) %>%
+  
+  # Rectangle
+  add_trace(
+    x = c(0, 0, 2, 2, 0, 0, 2, 2),
+    y = c(0, 0, 4, 4, 4, 0, 0, 4),
+    type = "scatter",
+    mode = "lines",
+    line = list(width = 2, color = "orange"),
+    showlegend = FALSE
+  ) %>%
+  
+  # Arc theta
+  add_trace(
+    x = r * cos(theta),
+    y = r * sin(theta),
+    type = "scatter",
+    mode = "lines",
+    line = list(width = 2, color = "dodgerblue"),
+    name = "theta"
+  ) %>%
+  
+  # Flèche au bout de theta
+  add_trace(
+    x = arrow_x,
+    y = arrow_y,
+    type = "scatter",
+    mode = "lines",
+    fill = "toself",
+    line = list(color = "dodgerblue"),
+    fillcolor = "dodgerblue",
+    showlegend = FALSE
+  ) %>%
+  
+  # Segment rho
+  add_trace(
+    x = c(0, 2),
+    y = c(0, 4),
+    type = "scatter",
+    mode = "lines",
+    line = list(width = 2, color = "#BA52ED"),
+    name = "rho"
+  ) %>%
+  
+  # Points
+  add_trace(
+    x = ~x,
+    y = ~y,
+    type = "scatter",
+    mode = "markers",
+    marker = list(size = 6, color = "#FB2C36"),
+    showlegend = FALSE
+  ) %>%
+  
+  # Label θ
+  add_annotations(
+    x = x_lab,
+    y = y_lab,
+    text = "\u03B8",
+    showarrow = FALSE,
+    font = list(size = 18, color = "dodgerblue")
+  ) %>%
+
+    add_annotations(
+    x = .75,
+    y = 2.25,
+    text = "\u03C1",
+    showarrow = FALSE,
+    font = list(size = 18, color = "#BA52ED")
+  ) %>%
+  
+  layout(
+    xaxis = list(scaleanchor = "y"),
+    yaxis = list()
+  )
+
+fig  %>% layout(
+  legend = list(orientation = 'h', font = list(size = 22, color = "white")),
+  xaxis = list(
+        range = c(-.3,2.5),
+        constrain = "domain",
+        zerolinecolor = 'ffff',
+        zerolinewidth = 4,
+        gridcolor = 'ffff',      
+        dtick = 1,
+        tickfont = list(size = 22, color = 'white')
+      ),
+      yaxis = list(
+        range = c(-.5,4.2),
+        zerolinecolor = 'ffff',
+        zerolinewidth = 4,
+        gridcolor = 'ffff',
+        dtick = 1,
+        scaleanchor = "x",
+        scaleratio = 1,
+        tickfont = list(size = 22, color = 'white')
+      ),
+  plot_bgcolor  = "transparent",
+  paper_bgcolor = "transparent"
+)
+
+```
+:::
+:::{.column width="50%"}
+- l'application correspondant au changement de variables des polaires en cartésiennes est $\varphi$ donnée par $\varphi(\rho,\theta)=(\rho\cos\theta,\rho\sin\theta)$ qui réalise une bijection de
+$\{(0,0)\}\cup(\mathbb R^{+*}\times [0,2\pi[)$ sur $\mathbb R^2$
+:::
+::::
+
+
+
+
+## Exemple 2
+
+- **les coordonnées cylindriques**, sont la donnée d'un triplet $(\rho,\theta,z)$ pour localiser un point de l'espace
+
+::::{.columns}
+::: {.column width="50%"}
+
+```{r}
+library(plotly)
+library(dplyr)
+
+# -----------------------------
+# Données
+# -----------------------------
+x <- c(0, 2, 2)
+y <- c(0, 4, 4)
+z <- c(0, 0, 3)
+data <- data.frame(x, y, z)
+
+rho <- sqrt(20)
+theta <- seq(0, atan(2), by = 0.001)
+
+r <- rho / 3
+theta_end <- max(theta)
+
+# -----------------------------
+# Courbe theta (fin + tangente)
+# -----------------------------
+x_theta_end <- r * cos(theta_end)
+y_theta_end <- r * sin(theta_end)
+z_theta_end <- 0
+
+# Tangente unitaire (plan horizontal)
+u_theta <- -sin(theta_end)
+v_theta <-  cos(theta_end)
+w_theta <-  0
+n <- sqrt(u_theta^2 + v_theta^2)
+u_theta <- u_theta / n
+v_theta <- v_theta / n
+
+# -----------------------------
+# Label theta
+# -----------------------------
+theta_lab <- theta_end / 2
+x_lab_theta <- 1.12 * r * cos(theta_lab)
+y_lab_theta <- 1.12 * r * sin(theta_lab)
+z_lab_theta <- 0
+
+# --- rho ---
+x_rho_end <- 2
+y_rho_end <- 4
+z_rho_end <- 0
+
+u_rho <- 2
+v_rho <- 4
+w_rho <- 0
+nr <- sqrt(u_rho^2 + v_rho^2)
+u_rho <- u_rho / nr
+v_rho <- v_rho / nr
+
+# label rho
+x_lab_rho <- 1.05 * x_rho_end
+y_lab_rho <- 1.05 * y_rho_end
+z_lab_rho <- 0
+
+# --- z ---
+x_z_end <- 0
+y_z_end <- 0
+z_z_end <- 3
+
+u_z <- 0
+v_z <- 0
+w_z <- 1
+
+# label z
+x_lab_z <- 0
+y_lab_z <- 0
+z_lab_z <- 1.1 * z_z_end
+
+# -----------------------------
+# Figure
+# -----------------------------
+fig <- data %>%
+  plot_ly(height = 450, width = 500) %>%
+
+  # Points
+  add_trace(
+    x = ~x,
+    y = ~y,
+    z = ~z,
+    type = "scatter3d",
+    mode = "markers",
+    marker = list(size = 6, color = "#FB2C36"),
+    showlegend = FALSE
+  ) %>%
+
+  # Rectangle
+  add_trace(
+    x = c(0, 0, 2, 2, 0, 0, 2, 2),
+    y = c(0, 0, 4, 4, 4, 0, 0, 4),
+    z = c(0, 3, 3, 0, 0, 0, 0, 0),
+    type = "scatter3d",
+    mode = "lines",
+    line = list(width = 6, color = "orange"),
+    showlegend = FALSE
+  ) %>%
+
+  # Arc theta
+  add_trace(
+    x = r * cos(theta),
+    y = r * sin(theta),
+    z = 0 * theta,
+    type = "scatter3d",
+    mode = "lines",
+    line = list(width = 6, color = "dodgerblue"),
+    name = "theta"
+  ) %>%
+
+  # Cone theta
+  add_trace(
+    type = "cone",
+    x = c(x_theta_end),
+    y = c(y_theta_end),
+    z = c(z_theta_end),
+    u = c(u_theta),
+    v = c(v_theta),
+    w = c(w_theta),
+    anchor = "tip",
+    sizemode = "absolute",
+    sizeref = 0.30,
+    colorscale = list(c(0, "dodgerblue"), c(1, "dodgerblue")),
+    showscale = FALSE
+  ) %>%
+
+  # Segment rho
+  add_trace(
+    x = c(0, 2),
+    y = c(0, 4),
+    z = c(0, 0),
+    type = "scatter3d",
+    mode = "lines",
+    line = list(width = 6, color = "#BA52ED"),
+    name = "rho"
+  ) %>%
+  
+
+  
+  add_trace(
+  x = c(x_lab_rho/2),
+  y = c(y_lab_rho/2),
+  z = c(z_lab_rho),
+  type = "scatter3d",
+  mode = "text",
+  text = "\u03C1",
+  textfont = list(size = 20, color = "#BA52ED"),
+  showlegend = FALSE
+) %>% 
+  
+  add_trace(
+  x = c(x_lab_z),
+  y = c(y_lab_z),
+  z = c(z_lab_z),
+  type = "scatter3d",
+  mode = "text",
+  text = "z",
+  textfont = list(size = 20, color = "#31D492"),
+  showlegend = FALSE
+) %>% 
+
+  # Axe z
+  add_trace(
+    x = c(0, 0),
+    y = c(0, 0),
+    z = c(3, 0),
+    type = "scatter3d",
+    mode = "lines",
+    line = list(width = 6, color = "#31D492"),
+    name = "z"
+  ) %>%
+
+  # Label θ
+  add_trace(
+    x = c(x_lab_theta),
+    y = c(y_lab_theta),
+    z = c(z_lab_theta),
+    type = "scatter3d",
+    mode = "text",
+    text = "\u03B8",
+    textfont = list(size = 20, color = "dodgerblue"),
+    showlegend = FALSE
+  ) %>%
+
+  layout(
+    scene = list(aspectmode = "data"),
+    legend = list(orientation = "h", font = list(size = 22, color = "white")),
+    plot_bgcolor  = "transparent",
+    paper_bgcolor = "transparent"
+  )
+
+fig
+  
+```
+:::
+::: {.column width="50%"}
+- l'application correspondant au changement de variables des cylindriques en cartésiennes est $\varphi$ donnée par $\varphi(\rho,\theta,z)=(\rho\cos\theta,\rho\sin\theta,z)$ qui réalise une bijection de
+$\{(0,0,0)\}\cup(\mathbb R^{+*}\times[0,2\pi[\times\mathbb R)$ sur $\mathbb R^2$
+
+:::
+::::
+
+
+## Exemple 3
+
+- **les coordonnées sphériques**, sont la donnée d'un triplet $(\rho,\varphi,\theta)$ pour localiser un point de l'espace
+
+::::{.columns}
+:::{.column width="50%"}
+```{r}
+# -----------------------------
+# Données
+# -----------------------------
+x <- c(0, 2)
+y <- c(0, 4)
+z <- c(0, 3)
+data <- data.frame(x, y, z)
+
+rho <- sqrt(29)
+
+teta <- seq(0, acos(3 / rho), by = 0.001)
+phi  <- seq(0, atan(2), by = 0.001)
+
+r <- rho / 3
+
+# -----------------------------
+# Courbe theta (fin + tangente)
+# -----------------------------
+phi_end <- max(phi)
+
+x_theta_end <- r * sin(acos(3 / rho)) * cos(phi_end)
+y_theta_end <- r * sin(acos(3 / rho)) * sin(phi_end)
+z_theta_end <- 0
+
+# Tangente theta (plan horizontal)
+u_theta <- -sin(phi_end)
+v_theta <-  cos(phi_end)
+w_theta <-  0
+n <- sqrt(u_theta^2 + v_theta^2)
+u_theta <- u_theta / n
+v_theta <- v_theta / n
+
+# -----------------------------
+# Courbe phi (fin + tangente)
+# -----------------------------
+teta_end <- max(teta)
+
+x_phi_end <- r * sin(teta_end) * cos(atan(2))
+y_phi_end <- r * sin(teta_end) * sin(atan(2))
+z_phi_end <- r * cos(teta_end)
+
+# Tangente phi (plan vertical)
+u_phi <-  r * cos(teta_end) * cos(atan(2))
+v_phi <-  r * cos(teta_end) * sin(atan(2))
+w_phi <- -r * sin(teta_end)
+n <- sqrt(u_phi^2 + v_phi^2 + w_phi^2)
+u_phi <- u_phi / n
+v_phi <- v_phi / n
+w_phi <- w_phi / n
+
+# -----------------------------
+# Labels θ et φ
+# -----------------------------
+phi_lab  <- phi_end / 2
+teta_lab <- teta_end / 2
+
+x_lab_theta <- 1.12 * r * sin(acos(3 / rho)) * cos(phi_lab)
+y_lab_theta <- 1.12 * r * sin(acos(3 / rho)) * sin(phi_lab)
+z_lab_theta <- 0
+
+x_lab_phi <- 1.12 * r * sin(teta_lab) * cos(atan(2))
+y_lab_phi <- 1.12 * r * sin(teta_lab) * sin(atan(2))
+z_lab_phi <- 1.12 * r * cos(teta_lab)
+
+# --- rho ---
+x_rho_end <- 2
+y_rho_end <- 4
+z_rho_end <- 3
+
+u_rho <- 2
+v_rho <- 4
+w_rho <- 3
+nr <- sqrt(u_rho^2 + v_rho^2 + w_rho^2)
+u_rho <- u_rho / nr
+v_rho <- v_rho / nr
+w_rho <- w_rho / nr
+
+# label rho
+x_lab_rho <- 1.05 * x_rho_end
+y_lab_rho <- 1.05 * y_rho_end
+z_lab_rho <- 1.05 * z_rho_end
+
+# -----------------------------
+# Figure
+# -----------------------------
+fig <- data %>% plot_ly(height = 450, width = 500) %>%
+  
+  # rho
+  add_trace(
+    x = ~x, y = ~y, z = ~z,
+    type = "scatter3d",
+    mode = "lines+markers",
+    line = list(width = 8, color = "#BA52ED"),
+    marker = list(size = 6, color = "#BA52ED"),
+    name = "rho"
+  ) %>%
+  
+  # Box
+  add_trace(
+    x = c(0,0,2,2,0,0,2,2,0),
+    y = c(0,0,4,4,4,0,0,4,0),
+    z = c(0,3,3,0,0,0,0,0,0),
+    type = "scatter3d",
+    mode = "lines",
+    line = list(width = 6, color = "orange"),
+    showlegend = FALSE
+  ) %>%
+  
+  # theta curve
+  add_trace(
+    x = r * sin(acos(3 / rho)) * cos(phi),
+    y = r * sin(acos(3 / rho)) * sin(phi),
+    z = 0 * phi,
+    type = "scatter3d",
+    mode = "lines",
+    line = list(width = 6, color = "dodgerblue"),
+    name = "theta"
+  ) %>%
+  
+  # theta cone
+  add_trace(
+    type = "cone",
+    x = c(x_theta_end),
+    y = c(y_theta_end),
+    z = c(z_theta_end),
+    u = c(u_theta),
+    v = c(v_theta),
+    w = c(w_theta),
+    anchor = "tip",
+    sizemode = "absolute",
+    sizeref = 0.30,
+    colorscale = list(c(0, "dodgerblue"), c(1, "dodgerblue")),
+    showscale = FALSE
+  ) %>%
+  
+  # phi curve
+  add_trace(
+    x = r * sin(teta) * cos(atan(2)),
+    y = r * sin(teta) * sin(atan(2)),
+    z = r * cos(teta),
+    type = "scatter3d",
+    mode = "lines",
+    line = list(width = 6, color = "#31D492"),
+    name = "phi"
+  ) %>%
+  
+  # phi cone
+  add_trace(
+    type = "cone",
+    x = c(x_phi_end),
+    y = c(y_phi_end),
+    z = c(z_phi_end),
+    u = c(u_phi),
+    v = c(v_phi),
+    w = c(w_phi),
+    anchor = "tip",
+    sizemode = "absolute",
+    sizeref = 0.30,
+    colorscale = list(c(0, "#31D492"), c(1, "#31D492")),
+    showscale = FALSE
+  ) %>%
+  
+  # Labels θ et φ
+  add_trace(
+    x = c(x_lab_theta),
+    y = c(y_lab_theta),
+    z = c(z_lab_theta),
+    type = "scatter3d",
+    mode = "text",
+    text = "\u03B8",
+    textfont = list(size = 20, color = "dodgerblue"),
+    showlegend = FALSE
+  ) %>%
+  
+  add_trace(
+    x = c(x_lab_phi),
+    y = c(y_lab_phi),
+    z = c(z_lab_phi),
+    type = "scatter3d",
+    mode = "text",
+    text = "\u03C6",
+    textfont = list(size = 20, color = "#31D492"),
+    showlegend = FALSE
+  ) %>%
+  
+  add_trace(
+  x = c(x_lab_rho/2),
+  y = c(y_lab_rho/2),
+  z = c(z_lab_rho/2),
+  type = "scatter3d",
+  mode = "text",
+  text = "\u03C1",
+  textfont = list(size = 20, color = "#BA52ED"),
+  showlegend = FALSE
+) %>% 
+
+  layout(
+    scene = list(aspectmode = "data"),
+    legend = list(orientation = "h", font = list(size = 22, color = "white")),
+    plot_bgcolor  = "transparent",
+    paper_bgcolor = "transparent"
+  )
+
+fig
+
+
+```
+:::
+:::{.column width="50%"}
+- l'application correspondant au changement de variables des sphériques en cartésiennes est $\varphi$ donnée par $\varphi(\rho, \varphi,\theta)=(\rho\cos\theta\sin\varphi,\rho\sin\theta\sin\varphi,\rho  cos\varphi)$ qui réalise une bijection de
+$(\mathbb R^+\times \{\pi\}\times \{0\})\cup(\mathbb R^{+*}\times [0,\pi[\times [0,2\pi[)$ sur $\mathbb R^3$
+:::
+::::
+
+## Dérivées partielles 
+- notons $\mathbf e_i = (\underbrace{0,\dots,0}_{1 \,à\, i-1 },\underbrace 1_{i},\underbrace{0,\dots,0}_{i+1 \,à\, n })$ le $i^e$ vecteur  de la base canonique de $\mathbb R^n$
+
+>### Définition :
+> la **dérivée partielle** d'une fonction $f$ de $\mathbb R^n$  dans $\mathbb R^p $ en $a$ par rapport à $x_i$, si elle existe est donnée par : $$\frac{\partial f}{\partial x_i}(a)=\lim_{h\to 0}\frac{f(a+h\mathbf e_i)-f(a)}{h}.$$
+
+- surtout bien faire attention aux dimensions ! La variable $h$ est réelle, le vecteur $\mathbf e_{i}$ vit dans l'espace de départ $\mathbb R^{n}$, alors que  la  dérivée partielle prise en $a\in\mathbb R^{n}$ vit dans l'espace d'arrivée $\mathbb R^{p}$ !
+
+## Exemple
+
+- soit $f$ la fonction définie sur $\mathbb R^3$ par $$f(x,y,z)=(xy,xz,xyz,yz)\in\mathbb R^4$$
+- la dérivée partielle  par rapport à $x$ au point $(a,b,c)$ est donnée par
+$$\frac{\partial f}{\partial x}(a,b,c)=\begin{pmatrix}b\\c\\bc\\0\end{pmatrix}.$$
+
+## Détails de l'exemple
+- en effet, 
+$$f(a+h\mathbf e_{1})-f(a)=
+	 \begin{pmatrix}(a+h)b\\(a+h)c\\(a+h)bc\\bc\end{pmatrix}-\begin{pmatrix}ab\\ac\\abc\\bc\end{pmatrix}=\begin{pmatrix}hb\\hc\\hbc\\0\end{pmatrix};
+$$ ainsi 
+$$
+	\frac{f(a+h\mathbf e_{1})-f(a)}h=\begin{pmatrix}b\\c\\bc\\0\end{pmatrix},
+$$ qui est constant en $h$ donc tend vers la même quantité lorsque $h$ tend vers 0.
+
+
+## Matrice jacobienne et jacobien
+
+>### Définition :
+> soit un ensemble ouvert $\mathcal U\subset\mathbb R^{n}$ et $f$ une fonction à images dans $\mathcal R^p$ définie au moins sur $\mathcal U$ :
+>
+> - on appelle **matrice jacobienne de $f$ en $a$** la matrice définie par $\left[J_{f}(a)\right]_{i,j}=\frac{\partial f_{i}}{\partial x_{j}}(a)$, où $f_i$ est la $i^e$ application partielle de $f$ :
+$$	J_{f}(a)=\begin{pmatrix}\frac{\partial f_{1}}{\partial x_{1}}(a) &\dots &\frac{\partial f_{1}}{\partial x_{n}}(a)\\
+	\vdots &\ddots &\vdots\\
+	\frac{\partial f_{p}}{\partial x_{1}}(a) &\dots &\frac{\partial f_{p}}{\partial x_{n}}(a)
+	\end{pmatrix}\in\mathbb R^{p\times n}
+$$
+> - si $p=n$, la matrice jacobienne est carrée et on appelle **jacobien de $f$ en $a$** son déterminant $\left|J_{f}(a)\right|$ de $J_{f}(a).$
+
+
+## Structure de la matrice
+
+- il y a deux lectures possibles de la matrice, par ligne ou par colonne :
+$$J_{f}(a)=\begin{pmatrix}\nabla f_{1}(a)^{*}\\\hdashline\vdots\\\hdashline\nabla f_{n}(a)^{*} \end{pmatrix}=\left(\begin{array}{c:c:c}\displaystyle\frac{\partial f}{\partial x_{1}}(a)&\dots&\displaystyle\frac{\partial f}{\partial x_{n}}(a)\end{array}\right)$$
+- les lignes sont les transposées des gradients des applications partielles :
+  $$\nabla f_{i}(a) = \left(\frac{\partial f_{i}}{\partial x_{1}}(a), \dots ,\frac{\partial f_{i}}{\partial x_{n}}(a)\right) $$
+- les colonnes sont les différentielles de $f$ en $a$ suivant les variables
+- il y a donc **autant de colonnes que de variables** et **autant de lignes que la dimension de l'espace d'arrivée**.
+
+## Fonction différentiable
+
+>### Définition :
+> soit un ensemble ouvert $\mathcal U\subset\mathbb R^{n}$ et $f$ une fonction à images dans $\mathcal R^p$ définie au moins sur $\mathcal U$ :
+>
+> la fonction $f$ est dite **différentiable en $a$** s'il existe  
+>
+>- une fonction continue $\varepsilon$ continue sur un ouvert $\mathcal V$ contenant $0_{\mathbb R^n}$ telle que $\displaystyle \lim_{h\to 0_{\mathbb R^n}}\varepsilon(h)=0$   
+>- une application linéaire $df(a)$ de $\mathbb R^n$ dans $\mathbb R^p$
+> telles que $$f(a+h)=f(a) + L(h) + \|h\|\varepsilon(h).$$
+> $L$ s'appelle la **différentielle de  $f$ en $a$** est notée **$df(a)$**
+
+- en d'autres termes, $f$ admet une approximation affine en $a$
+
+## Fonctions $C^1$
+
+>### Définition :
+> si toutes ses dérivées partielles sont continues sur $\mathcal U$, on dit que $f$ est **continûment différentiable** sur $\mathcal U$, ou de classe $\mathcal C^{1}$ sur $\mathcal U$.
+
+- les applications affines, les applications aux coordonnées polynomiales ainsi que les changements de coordonnées présentés en début de chapitre sont de classe $\mathcal C^{1}$ sur $\mathbb R^n$
+- dans le cas  $n=p=1$, l'exemple type est la fonction $f$ qui vaut 0 en 0  et  $x^2\sin(\tfrac 1x)$ sur $\mathbb R^*$, elle est dérivable sur $\mathbb R$ mais pas de continûment différentiable en 0 
+
+
+## Liens entre notions
+
+>### Théorème : 
+>
+> - si $f$ est différentiable en $a\in\mathcal U$ où $\mathcal U\in\mathbb R^n$ est un ouvert  alors 
+     $f$ est continue en $a$ et admet des dérivées partielles en $a$ et $$df(a)h = \sum_{k=i }^n h_i\frac{\partial f}{\partial x_i}(a)$$
+> - si $f$ est de classe $\mathcal C^{1}$ en $a$ alors elle est différentiable en $a$
+
++ les réciproques sont fausses (cf 1er semestre)
++ si l'on se représente les vecteurs par des vecteurs colonnes, alors **le développement limité à l'ordre 1** s'exprime :
+$$f(a+h) = f(a) + J_f(a)h + \|h\|\varepsilon(h)$$
+
+
+
+# Accroissements finis
+
+
+# Développements limités à l'ordre 2
+
+# Optimisation

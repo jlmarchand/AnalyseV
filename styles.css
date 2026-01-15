@@ -1,0 +1,6 @@
+/* Slide Table of Contents */
+section[data-state="toc"] {
+  background-image: url("_extensions/schochastics/blackboard/blackboard.png");
+  background-size: cover;
+  background-position: center;
+}
