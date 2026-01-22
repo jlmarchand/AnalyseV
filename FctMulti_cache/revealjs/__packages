@@ -12,3 +12,6 @@ plotly
 latex2exp
 kableExtra
 htmltools
+geometry
+viridisLite
+colorspace
