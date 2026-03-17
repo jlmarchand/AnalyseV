@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="SeriesNum_files/libs/clipboard/clipboard.min.js"></script>
+<script src="SeriesNum_files/libs/quarto-html/tabby.min.js"></script>
+<script src="SeriesNum_files/libs/quarto-html/popper.min.js"></script>
+<script src="SeriesNum_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="SeriesNum_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="SeriesNum_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="SeriesNum_files/libs/quarto-html/quarto-syntax-highlighting-dark-bc185b5c5bdbcb35c2eb49d8a876ef70.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.33">
+
+  <meta name="author" content="Jean-Louis Marchand">
+  <title>Séries numériques</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="SeriesNum_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="SeriesNum_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="SeriesNum_files/libs/revealjs/dist/theme/quarto-d160da4ebc569886ade2dbcd809f9464.css">
+  <link rel="stylesheet" href="_extensions/schochastics/blackboard/theme.css">
+  <link rel="stylesheet" href="styles.css">
+  <link href="SeriesNum_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="SeriesNum_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="SeriesNum_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="SeriesNum_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="SeriesNum_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="SeriesNum_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-dark">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="_extensions/schochastics/blackboard/blackboard.png" class="quarto-title-block center">
+  <h1 class="title">Séries numériques</h1>
+  <p class="subtitle">ou étude des accroissements d’une suite réelle</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Jean-Louis Marchand 
+</div>
+</div>
+</div>
+
+</section><section id="TOC">
+<nav role="doc-toc"> 
+<h2 id="toc-title">Sommaire</h2>
+<ul>
+<li><a href="#/introduction-et-premières-définitions" id="/toc-introduction-et-premières-définitions"><span class="header-section-number">1</span> Introduction et premières définitions</a></li>
+<li><a href="#/rappels-sur-les-suites-numériques-et-conséquences" id="/toc-rappels-sur-les-suites-numériques-et-conséquences"><span class="header-section-number">2</span> Rappels sur les suites numériques et conséquences</a></li>
+<li><a href="#/séries-numériques-généralités" id="/toc-séries-numériques-généralités"><span class="header-section-number">3</span> Séries numériques : généralités</a></li>
+<li><a href="#/séries-à-termes-positifs" id="/toc-séries-à-termes-positifs"><span class="header-section-number">4</span> Séries à termes positifs</a></li>
+<li><a href="#/séries-à-terme-général-quelconque" id="/toc-séries-à-terme-général-quelconque"><span class="header-section-number">5</span> Séries à terme général quelconque</a></li>
+</ul>
+</nav>
+</section>
+<section>
+<section id="introduction-et-premières-définitions" class="title-slide slide level1 center" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="1">
+<h1><span class="header-section-number">1</span> Introduction et premières définitions</h1>
+
+</section>
+<section id="série-numérique" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> Série numérique</h2>
+<blockquote>
+<h3 id="définition" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Définition</h3>
+<p>pour une suite réelle <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span>, on définit la <strong>série numérique <span class="math inline">\((S_n)_{n\in\mathbb N}\)</span> de terme général <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span></strong> comme la suite des <strong>sommes partielles</strong> des premiers termes de <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span>, on notera <span class="math inline">\(\sum_{n\geq 0}u_n\)</span> la série de terme général <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span> <span class="math display">\[S_n = \sum_{k=0}^nu_k\]</span></p>
+</blockquote>
+<ul>
+<li>exemple : au lycée , on aborde la somme des premiers termes d’une suite géométrique <span class="math inline">\(u_n= u_0q^n\)</span></li>
+</ul>
+<p><span class="math display">\[\sum_{k=0}^n u_k= u_0+u_1+\dots+u_n=u_0\frac{1-q^{n+1}}{1-q^{\phantom{n+1}}}\]</span></p>
+</section>
+<section id="suites-et-séries" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> Suites et séries</h2>
+<ul>
+<li>d’après la définition, toute série numérique est une suite réelle, la réciproque est vraie,<br>
+</li>
+<li>en effet toute suite réelle <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span>, est la série des ses <strong>accroissements</strong> <span class="math inline">\(v_n=u_n-u_{n-1}\)</span>, avec <span class="math inline">\(v_0=u_0\)</span> <span class="math display">\[u_n = u_n-u_{n-1}+u_{n-1}-u_{n-2}+u_{n-2}-u_{n-3}+\dots + u_0 - u_0\\
+= \sum_{k=0}^nv_k\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\]</span></li>
+<li>dit autrement, on étudie les mêmes objets sans se concentrer sur les mêmes aspects</li>
+</ul>
+</section></section>
+<section>
+<section id="rappels-sur-les-suites-numériques-et-conséquences" class="title-slide slide level1 center" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="2">
+<h1><span class="header-section-number">2</span> Rappels sur les suites numériques et conséquences</h1>
+
+</section>
+<section id="monotonie" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> Monotonie</h2>
+<blockquote>
+<h3 id="définition-1" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Définition</h3>
+<p>une suite réelle <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span> est <strong>monotone</strong> si elle est <strong>croissante</strong> ou <strong>décroissante</strong>; elle est <strong>croissante</strong> (respectivement <strong>décroissante</strong>) si <span class="math inline">\(\forall n\in\mathbb N^{*},\, u_{n-1}\leq u_{n}\)</span> (resp. <span class="math inline">\(u_{n-1}\geq u_{n}\)</span>); on parle de <strong>stricte</strong> monotonie lorsque l’inégalité est stricte</p>
+</blockquote>
+<blockquote>
+<h3 id="propriété" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Propriété</h3>
+<p>une série numérique est croissante (resp. décroissante) si et seulement si son terme général est positif (resp. négatif)</p>
+</blockquote>
+<ul>
+<li>il suffit pour ça de garder en tête la relation essentielle : <span class="math display">\[S_{n+1}=S_n+u_{n+1}\]</span></li>
+</ul>
+</section>
+<section id="convergence" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> Convergence</h2>
+<blockquote>
+<h3 id="définition-2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Définition</h3>
+<ul>
+<li>une suite réelle <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span> converge vers une limite réelle <span class="math inline">\(\ell\)</span> si <span class="math inline">\(\forall \varepsilon&gt;0,\exists n_0\in\mathbb N,\forall n\geq n_0,\quad |u_n-\ell|&lt; \varepsilon\)</span></li>
+<li>une suite réelle <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span> admet <span class="math inline">\(=\infty\)</span> (resp. <span class="math inline">\(-\infty\)</span>) comme limite si <span class="math inline">\(\forall M&gt;0,\exists n_0\in\mathbb N,\forall n\geq n_0,\quad u_n&gt; M  (\textrm{resp. } -u_n&gt;M)\)</span></li>
+</ul>
+</blockquote>
+<blockquote>
+<h3 id="propriété-1" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Propriété</h3>
+<ul>
+<li>la limite d’une suite est unique</li>
+<li>toute combinaison linéaire de suite convergentes converge vers la combinaison linéaire des limites</li>
+<li>tout produit de suites réelles convergentes converge vers le produit des limites</li>
+<li>toute suite convergente est bornée</li>
+</ul>
+</blockquote>
+</section>
+<section id="convergence-monotone" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> Convergence monotone</h2>
+<blockquote>
+<h3 id="théorème-de-convergence-monotone" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Théorème de convergence monotone</h3>
+<ul>
+<li>toute suite croissante majorée converge vers le plus petit majorant de la suite</li>
+<li>toute suite réelle décroissante minorée converge vers le plus grand minorant de la suite</li>
+<li>toute suite croissante non-majorée tend vers <span class="math inline">\(+\infty\)</span></li>
+<li>toute suite décroissante non-minorée tend vers <span class="math inline">\(-\infty\)</span></li>
+</ul>
+</blockquote>
+<ul>
+<li>ce résultat permet de prouver rapidement une convergence, la détermination de la limite demande souvent plus de travail, ce sera souvent le cas sur l’étude des séries</li>
+</ul>
+</section>
+<section id="suites-adjacentes" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> Suites adjacentes</h2>
+<blockquote>
+<h3 id="théorème-des-suites-adjacentes" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Théorème des suites adjacentes</h3>
+<p>soit <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span> et <span class="math inline">\((v_n)_{n\in\mathbb N}\)</span> deux suites réelles, la première croissante, la seconde décroissante, telles que <span class="math display">\[\lim_{n\to+\infty}u_n-v_n=0,\]</span> alors les deux suites convergent vers une même limite réelle <span class="math inline">\(\ell\in\mathbb R\)</span>. De plus, pour tout <span class="math inline">\(n\in\mathbb N, u_n\leq  v_n.\)</span></p>
+</blockquote>
+<ul>
+<li>exemple cela peut servir pour les séries, par exemple pour montrer que les suites <span class="math inline">\(u_n=\sum_{k=0}^n\frac1{k!}\)</span> et <span class="math inline">\(v_n=u_n+\frac{1}{n(n!)}\)</span> convergent</li>
+<li>c’est aussi la clé de la démonstration du théorème des séries alternées (à venir)</li>
+</ul>
+</section>
+<section id="comparaison-asymptotique" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> Comparaison asymptotique</h2>
+<blockquote>
+<h3 id="définition-3" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Définition</h3>
+<p>soit <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span> et <span class="math inline">\((v_n)_{n\in\mathbb N}\)</span> deux suites réelles,</p>
+<ul>
+<li>la suite <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span> est <strong>négligeable</strong> devant <span class="math inline">\((v_n)_{n\in\mathbb N}\)</span> et on note <span class="math inline">\(u_n=o(v_n)\)</span> s’il existe une suite réelle <span class="math inline">\((\varepsilon_n)_{n\in\mathbb N}\)</span> convergeant vers 0 telle que <span class="math display">\[\forall n\in\mathbb N,\quad u_n=\varepsilon_nv_n\]</span></li>
+<li>la suite <span class="math inline">\((u_n)_{n\in\mathbb N}\)</span> est <strong>équivalente</strong> à <span class="math inline">\((v_n)_{n\in\mathbb N}\)</span> et on note <span class="math inline">\(u_n\sim v_n\)</span> s’il existe une suite réelle <span class="math inline">\((\varepsilon_n)_{n\in\mathbb N}\)</span> convergeant vers 0 telle que <span class="math display">\[\forall n\in\mathbb N,\quad u_n=(1+\varepsilon_n)v_n\]</span></li>
+</ul>
+</blockquote>
+<ul>
+<li>si la suite <span class="math inline">\((v_n)_{n \in\mathbb N}\)</span> ne s’annule pas à partir d’un certain rang <span class="math inline">\(n_0\)</span>, la première définition se résume par <span class="math inline">\(\lim_{n\to+\infty}\frac{u_n}{v_n}=0\)</span> et la deuxième par <span class="math inline">\(\lim_{n\to+\infty}\frac{u_n}{v_n}=1\)</span></li>
+<li>une suite convergente est équivalent à sa limite</li>
+</ul>
+</section>
+<section id="comparaison-et-opérations" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="2.6">
+<h2><span class="header-section-number">2.6</span> Comparaison et opérations</h2>
+<blockquote>
+<h3 id="propriété-2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Propriété</h3>
+<ul>
+<li>si <span class="math inline">\(u_n=o(w_n)\)</span> et <span class="math inline">\(v_n=o(w_n)\)</span> alors <span class="math inline">\(\quad\alpha u_n +\beta v_n=o(w_n)\)</span></li>
+<li>si <span class="math inline">\(u_n=o(v_n)\)</span> et <span class="math inline">\(v_n=o(w_n)\)</span> alors <span class="math inline">\(\quad u_n =o(w_n)\)</span></li>
+<li>si <span class="math inline">\(u_n=o(w_n)\)</span> alors <span class="math inline">\(\quad u_n v_n=o(w_nv_n)\)</span></li>
+<li>si <span class="math inline">\(u_n\sim v_n\)</span> et <span class="math inline">\(x_n\sim y_n\)</span> alors <span class="math inline">\(\quad u_n x_n\sim v_n y_n\)</span></li>
+<li>si <span class="math inline">\(u_n\sim v_n\)</span> et <span class="math inline">\(x_n\sim y_n\)</span> alors <span class="math inline">\(\quad\frac{u_n}{x_n}\sim \frac{v_n}{y_n}\)</span></li>
+<li>si <span class="math inline">\(u_n\sim v_n\)</span> alors pour tout <span class="math inline">\(p\in\mathbb Z,\)</span> <span class="math inline">\(\quad u_n^p\sim v_n^p\)</span></li>
+</ul>
+</blockquote>
+<ul>
+<li>de façon générale, la somme et la composition avec exponentielle ou le logarithme, par exemple pour la somme <span class="math inline">\(u_n=n+1,\, v_n = -n\)</span>, pour l’exponentielle <span class="math inline">\(u_n=n+\ln(2),\, v_n=n\)</span> et pour le logarithme <span class="math inline">\(u_n=1+\tfrac1n,\, v_n=1+\tfrac2n\)</span></li>
+</ul>
+</section>
+<section id="comparaisons-de-référence" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="2.7">
+<h2><span class="header-section-number">2.7</span> Comparaisons de référence</h2>
+<blockquote>
+<h3 id="propriété-3" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Propriété</h3>
+<p>pour toutes constantes strictement positives <span class="math inline">\(\alpha,\beta,\gamma,\delta\)</span>, on a <span class="math display">\[\begin{array}{c}\big(\ln n\big)^\alpha&amp;=o\left(n^\beta\right)\\n^\beta&amp;=o\left(n^{\gamma n}\right)\\e^{\gamma n}&amp;=o\left(n!^\delta\right)\end{array}\]</span></p>
+</blockquote>
+<ul>
+<li>ce résultat prolonge les croissances comparées connues <span class="math inline">\(\lim_{n\to+\infty}\frac{\ln n}{n}= 0\)</span> et <span class="math inline">\(\lim_{n\to+\infty}ne^{-n}= 0\)</span></li>
+</ul>
+</section></section>
+<section>
+<section id="séries-numériques-généralités" class="title-slide slide level1 center" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="3">
+<h1><span class="header-section-number">3</span> Séries numériques : généralités</h1>
+
+</section>
+<section id="deux-exemples-de-référence" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="3.1">
+<h2><span class="header-section-number">3.1</span> Deux exemples de référence</h2>
+<blockquote>
+<h3 id="propriété-4" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Propriété</h3>
+<p>toute série convergente possède un terme général qui tend vers 0</p>
+</blockquote>
+<ul>
+<li>résultat à prendre avec des pincettes car <strong>la réciproque est fausse !!!</strong></li>
+<li>les deux exemples <strong>importants</strong> pour saisir les nuances : les séries de terme général <span class="math inline">\(\tfrac1n\)</span> et <span class="math inline">\(\tfrac1{n^2}\)</span></li>
+</ul>
+</section>
+<section id="un-exemple-de-série-convergente" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="3.2">
+<h2><span class="header-section-number">3.2</span> Un exemple de série convergente</h2>
+<ul>
+<li>rappel : toute série de terme général positif majorée converge</li>
+<li><strong>la série <span class="math inline">\(\sum_{n\geq 1}\frac1{n^2}\)</span> est alors convergente</strong>, il suffit de travailler sur le terme général <span class="math display">\[\frac1{n^2}\leq \frac1{n(n-1)}=\frac1{n-1}-\frac1n\]</span> ainsi <span class="math display">\[\begin{array}{l}\displaystyle\sum_{k=2}^n\frac1{k-1}-\frac1k=\displaystyle\sum_{k=2}^n\frac1{k-1}-\sum_{k=2}^n\frac1k =\displaystyle\sum_{k=1}^{n-1}\frac1{k}-\sum_{k=2}^n\frac1k&amp;=1-\frac1n\end{array}\]</span> ainsi <span class="math display">\[\begin{array}{l} \displaystyle\sum_{k=1}^n\frac1{k^2}=1+ \displaystyle\sum_{k=2}^n\frac1{k^2}=2-\frac1n\leq 2\end{array}\]</span></li>
+</ul>
+</section>
+<section id="un-exemple-de-série-divergente" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="3.3">
+<h2><span class="header-section-number">3.3</span> Un exemple de série divergente</h2>
+<ul>
+<li><strong>la série <span class="math inline">\(\sum_{n\geq 1}\frac1{n}\)</span> est divergente</strong>, pour cela on compare des aires en utilisant la décroissance de la fonction inverse : <span class="math display">\[ \int_k^{k+1}\frac1xdx\leq \int_k^{k+1}\frac1{k}dx\]</span> ainsi en sommant de 1 à <span class="math inline">\(n\)</span>, <span class="math display">\[ \ln(n+1)\leq \sum_{k=1}^{n+1}\frac1{k},\]</span> notre série est encore croissante mais non majorée, elle diverge</li>
+<li>moralement, il faut retenir que dans ces deux exemples, le terme général tend vers 0, cependant dans la deuxième cette convergence n’est pas suffisamment rapide pour que la série converge !</li>
+</ul>
+</section>
+<section id="tout-est-dans-le-reste" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="3.4">
+<h2><span class="header-section-number">3.4</span> Tout est dans le reste</h2>
+<blockquote>
+<h3 id="définition-4" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Définition</h3>
+<p>l’étude de la convergence se nomme <strong>l’étude de la nature des séries</strong>, en cas de convergence, la limite est appelée <strong>somme de la série</strong>, et le <strong>reste <span class="math inline">\(R_n\)</span></strong> est défini par <span class="math display">\[R_n=S-S_n=\sum_{k=0}^{+\infty}u_k-\sum_{k=0}^{n}u_k=\sum_{k=n+1}^{+\infty}u_k\]</span></p>
+</blockquote>
+<ul>
+<li>exemple : la série géométrique <span class="math inline">\(\sum_{k\geq0}u_0q^k\)</span> converge si et seulement si <span class="math inline">\(|q|&lt;1\)</span> en effet, <span class="math display">\[\sum_{k=0}^nu_0q^k=u_0 \frac{1-q^{n+1}}{1-q}\stackrel{n\to+\infty}\longrightarrow u_0 \frac{1}{1-q}\textrm{ et } R_n  =  u_0 \frac{1}{1-q}-u_0 \frac{1-q^{n+1}}{1-q}= u_0 \frac{q^{n+1}}{1-q}\]</span></li>
+</ul>
+</section></section>
+<section>
+<section id="séries-à-termes-positifs" class="title-slide slide level1 center" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="4">
+<h1><span class="header-section-number">4</span> Séries à termes positifs</h1>
+
+</section>
+<section id="comparaison-de-séries" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="4.1">
+<h2><span class="header-section-number">4.1</span> Comparaison de séries</h2>
+<ul>
+<li>petit rappel : une série à terme général positif est croissante et converge si et seulement si la suite des sommes partielles est majorée</li>
+</ul>
+<blockquote>
+<h3 id="propriété-5" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Propriété</h3>
+<p>soit deux séries <span class="math inline">\(\sum_{n\geq 0}u_n\)</span> et <span class="math inline">\(\sum_{n\geq 0}v_n\)</span> telles que <span class="math inline">\(0\leq u_n\leq v_n\)</span> alors</p>
+<ul>
+<li>si <span class="math inline">\(\sum_{n\geq 0}v_n\)</span> converge alors <span class="math inline">\(\sum_{n\geq 0}u_n\)</span> converge aussi</li>
+<li>si <span class="math inline">\(\sum_{n\geq 0}u_n\)</span> converge alors si <span class="math inline">\(\sum_{n\geq 0}v_n\)</span> diverge également</li>
+</ul>
+</blockquote>
+<ul>
+<li>la série <span class="math inline">\(\sum_{n\geq 0}\frac1{n^3}\)</span> est convergente car à terme général positif et <span class="math inline">\(\frac1{n^3}\leq \frac1{n^2}\)</span> terme général d’une suite convergente</li>
+<li>la série <span class="math inline">\(\sum_{n\geq 0}\frac1{\sqrt{n}}\)</span> est divergente car à terme général positif et <span class="math inline">\(\frac1{\sqrt n}\geq \frac1{n}\)</span> terme général d’une suite divergente</li>
+</ul>
+</section>
+<section id="comparaison-de-séries-v2" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="4.2">
+<h2><span class="header-section-number">4.2</span> Comparaison de séries v2</h2>
+<blockquote>
+<h3 id="propriété-6" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Propriété</h3>
+<p>soit deux séries <span class="math inline">\(\sum_{n\geq 0}u_n\)</span> et <span class="math inline">\(\sum_{n\geq 0}v_n\)</span> telles <strong>à termes positifs</strong></p>
+<ul>
+<li>si <span class="math inline">\(u_n=o(v_n)\)</span> où <span class="math inline">\(\sum_{n\geq 0}v_n\)</span> est convergente, alors la série <span class="math inline">\(\sum_{n\geq 0}u_n\)</span> est convergente</li>
+<li>si <span class="math inline">\(u_n=o(v_n)\)</span> où <span class="math inline">\(\sum_{n\geq 0}v_n\)</span> est divergente, alors la série <span class="math inline">\(\sum_{n\geq 0}u_n\)</span> est divergente si <span class="math inline">\(u_n\sim v_n\)</span> alors les deux séries sont de même nature et les restes sont également équivalents</li>
+</ul>
+</blockquote>
+<ul>
+<li>ces résultats nécessitent de disposer des séries de références</li>
+</ul>
+</section>
+<section id="séries-de-riemann" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="4.3">
+<h2><span class="header-section-number">4.3</span> Séries de Riemann</h2>
+<blockquote>
+<h3 id="propriété-séries-de-riemann" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Propriété (séries de Riemann)</h3>
+<p>la série <span class="math inline">\(\sum_{n\geq 0}\frac{1}{n^\alpha}\)</span> converge <strong>si et seulement si</strong> <span class="math inline">\(\alpha&gt;1\)</span></p>
+</blockquote>
+<blockquote>
+<h3 id="corollaire-règle-de-riemann" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Corollaire (règle de Riemann)</h3>
+<p>considérons une série <span class="math inline">\(\sum_{n\geq 0}u_n\)</span> à terme général positif</p>
+<ul>
+<li>s’il existe <span class="math inline">\(\alpha&gt;1\)</span>, tel que <span class="math inline">\(\lim_{n\to+\infty}n^\alpha u_n=0\)</span> alors la série est convergente</li>
+<li>s’il existe <span class="math inline">\(\alpha\leq 1\)</span>, tel que <span class="math inline">\(\lim_{n\to+\infty}n^\alpha u_n=+\infty\)</span> alors la série est divergente</li>
+</ul>
+</blockquote>
+<ul>
+<li>exemple : la série <span class="math inline">\(\sum_{n\geq 0}e^{-2\sqrt n}\)</span> est convergente car <span class="math inline">\(\lim_{n\to+\infty}n^2e^{-2\sqrt n}=0\)</span></li>
+</ul>
+</section>
+<section id="règle-de-dalembert" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="4.4">
+<h2><span class="header-section-number">4.4</span> Règle de D’Alembert</h2>
+<blockquote>
+<h3 id="propriété-règle-de-dalembert" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Propriété (règle de D’Alembert)</h3>
+<p>soit <span class="math inline">\(\sum_{n\geq 0}u_n\)</span> une série à terme général <strong>strictement positif</strong> tel que <span class="math display">\[\lim_{n\to+\infty}\frac{u_{n+1}}{u_n}=\ell \in \mathbb R^+\cup\{+\infty\},\]</span> alors</p>
+<ul>
+<li>si <span class="math inline">\(\ell &lt;1,\)</span> la série diverge</li>
+<li>si <span class="math inline">\(\ell &gt;1,\)</span> elle converge</li>
+</ul>
+</blockquote>
+<ul>
+<li>la série <span class="math inline">\(\sum_{n\geq 0}\frac{|x|^n}{n!}\)</span> est convergente pour tout complexe <span class="math inline">\(x\)</span>, en effet pour <span class="math inline">\(x\neq 0\)</span> <span class="math display">\[\frac{\frac{|x|^{n+1}}{(n+1)!}}{\frac{|x|^n}{n!}}=\frac{|x|}{n+1}\stackrel{n\to+\infty}\longrightarrow 0\]</span></li>
+</ul>
+</section>
+<section id="règle-de-raabe-duhamel" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="4.5">
+<h2><span class="header-section-number">4.5</span> Règle de Raabe-Duhamel</h2>
+<blockquote>
+<h3 id="propriété-règle-de-raabe-duhamel" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Propriété (règle de Raabe-Duhamel)</h3>
+<p>soit <span class="math inline">\(\sum_{n\geq 0}u_n\)</span> une série à terme général <strong>strictement positif</strong> tel que <span class="math display">\[\frac{u_{n+1}}{u_n}=1-\frac\alpha n+o\left(\frac1n\right),\]</span> alors</p>
+<ul>
+<li>si <span class="math inline">\(\alpha &gt;1\)</span> la série converge</li>
+<li>si <span class="math inline">\(\alpha &lt;1\)</span> la série diverge</li>
+</ul>
+</blockquote>
+<ul>
+<li>la série <span class="math inline">\(\sum_{n\geq 0}\frac{e^nn!}{n^n}\)</span>, dans l’angle mort de la règle de D’Alembert <span class="math inline">\(\frac{\frac{e^{n+1}(n+1)!}{(n+1)^{n+1}}}{\frac{e^nn!}{n^n}}=e\left(\displaystyle \frac{n}{n+1}\right)^n=e\left(1+\displaystyle\frac1{n}\right)^{-n}=e^{1-n\ln\left(1+\tfrac1n\right)}=e^{\frac1{2n}+o(\frac1n)}=1+\frac1{2n}+o\left(\frac1n\right)\)</span></li>
+</ul>
+</section>
+<section id="comparaison-à-une-intégrale" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="4.6">
+<h2><span class="header-section-number">4.6</span> Comparaison à une intégrale</h2>
+<blockquote>
+<h3 id="théorème" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Théorème</h3>
+<p>soit <span class="math inline">\(f\)</span> une fonction positive continue et décroissante, alors la série <span class="math inline">\(\sum_{n\geq0}f(n)\)</span> est de même nature que l’intégrale <span class="math inline">\(\displaystyle \int_{\mathbb R^+}f(x)dx\)</span>. De plus la suite <span class="math inline">\(\left(S_n-\int_0^nf(x)dx\right)_{n \geq 0}\)</span> est convergente, ainsi</p>
+<ul>
+<li>si la série converge alors <span class="math inline">\(\int_{n+1}^{+\infty}f(x)dx\leq R_n\leq \int_n^{+\infty}f(x)dx\)</span></li>
+<li>si la série diverge, alors <span class="math inline">\(S_n\sim \int_0^nf(x)dx\)</span></li>
+</ul>
+</blockquote>
+<ul>
+<li>on retrouve l’approche utilisée pour démontrer la divergence de la série <span class="math inline">\(\sum_{n\geq 0}\frac1n\)</span></li>
+<li>elle peut être utilisée pour démontrer le comportement des séries de Riemann</li>
+</ul>
+</section></section>
+<section>
+<section id="séries-à-terme-général-quelconque" class="title-slide slide level1 center" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="5">
+<h1><span class="header-section-number">5</span> Séries à terme général quelconque</h1>
+
+</section>
+<section id="absolue-convergence" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="5.1">
+<h2><span class="header-section-number">5.1</span> Absolue convergence</h2>
+<blockquote>
+<h3 id="définition-5" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Définition</h3>
+<p>une série numérique <span class="math inline">\(\sum_{n\geq0}u_n\)</span> <strong>converge absolument</strong> si la série <span class="math inline">\(\sum_{n\geq0}|u_n|\)</span> converge</p>
+</blockquote>
+<blockquote>
+<h3 id="théorème-1" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Théorème</h3>
+<p>toute série absolument convergente est convergente</p>
+</blockquote>
+<ul>
+<li>attention ! la réciproque est fausse !</li>
+<li>cela permet d’utiliser les résultats sur les séries à termes positifs</li>
+</ul>
+</section>
+<section id="séries-alternées" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="5.2">
+<h2><span class="header-section-number">5.2</span> Séries alternées</h2>
+<blockquote>
+<h3 id="définition-6" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Définition</h3>
+<p>on appelle série alternée toute série pouvant s’écrire sous la forme <span class="math inline">\(\sum_{n\geq0}(-1)^na_n\)</span> où <span class="math inline">\((a_n)_{n\in\mathbb N}\)</span> est de signe constant</p>
+</blockquote>
+<blockquote>
+<h3 id="théorème-2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Théorème</h3>
+<p>soit <span class="math inline">\(\sum_{n\geq0}(-1)^na_n\)</span> une série alternée où la suite est décroissante et tend vers 0, alors la série converge, de plus <span class="math inline">\(|R_n|=\left|\sum_{k=n+1}^{+\infty}(-1)^ka_k\right|\leq |a_{n+1}|\)</span></p>
+</blockquote>
+<ul>
+<li>la série <span class="math inline">\(\sum_{n\geq0}\frac{(-1)^n}{n}\)</span> est alternée et convergente car la suite <span class="math inline">\((\frac1n)_n\)</span> tend vers 0</li>
+<li>attention à bien vérifier l’alternance : la série <span class="math inline">\(\sum_{n\geq0}\frac{(-1)^n}{n+(-1)^n}\)</span> n’est pas alternée !</li>
+</ul>
+</section>
+<section id="critère-dabel" class="slide level2" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover" data-number="5.3">
+<h2><span class="header-section-number">5.3</span> Critère d’Abel</h2>
+<blockquote>
+<h3 id="théorème-critère-dabel" data-background-image="_extensions/schochastics/blackboard/blackboard.png" data-background-size="cover">Théorème (critère d’Abel)</h3>
+<p>une série <span class="math inline">\(\sum_{n\geq 0}a_nb_n\)</span> où la suite <span class="math inline">\((a_n)\)</span> décroît vers 0 et les sommes partielles <span class="math inline">\(\sum_{n\geq 0}b_n\)</span> sont bornées est convergente</p>
+</blockquote>
+<ul>
+<li>la série <span class="math inline">\(\sum_{n\geq 0}\frac{\sin(\alpha n)}{n}\)</span> converge pour tout <span class="math inline">\(\alpha \in[0,2\pi[\)</span> en remarquant que <span class="math display">\[\sum_{k=0}^n\sin(\alpha k)=\mathfrak{Im}\left(\sum_{k=0}^ne^{i\alpha k}\right)=\mathfrak{Im}\left(\frac{1-e^{i(n+1)\alpha}}{1-e^{i\alpha}}\right)\\=\mathfrak{Im}\left(\frac{e^{i(n+1)\frac\alpha2}}{e^{i\frac\alpha2}}\frac{e^{-i(n+1)\frac\alpha2}-e^{i(n+1)\frac\alpha2}}{e^{-i\frac\alpha2}-e^{i \frac\alpha2}}\right)=\frac{\sin n\frac\alpha2\sin(n+1)\frac\alpha2}{\sin \frac\alpha2}\]</span> la série est bornée, on applique alors le critère</li>
+</ul>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p><a href="https://mr.schochastics.net">theme by schochastics</a></p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="SeriesNum_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="SeriesNum_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="SeriesNum_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="SeriesNum_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="SeriesNum_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="SeriesNum_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="SeriesNum_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="SeriesNum_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="SeriesNum_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="SeriesNum_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="SeriesNum_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
